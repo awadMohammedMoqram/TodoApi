@@ -101,12 +101,13 @@ namespace TodoApi.Controllers
         public ActionResult<object> GetPriorities()
         {
             var priorities = Enum.GetValues<TodoPriority>()
-                .Select(p => new { 
-                    name = p.ToString(), 
-                    value = (int)p 
+                .Select(p => new
+                {
+                    name = p.ToString(),
+                    value = (int)p
                 })
                 .ToList();
-            
+
             return Ok(priorities);
         }
 
