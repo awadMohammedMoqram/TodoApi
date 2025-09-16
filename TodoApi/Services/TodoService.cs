@@ -1,23 +1,9 @@
-﻿using TodoApi.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using TodoApi.Data;
 using TodoApi.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace TodoApi.Services
 {
-    public interface ITodoService
-    {
-        Task<IEnumerable<TodoItem>> GetAllTodosAsync();
-        Task<TodoItem?> GetTodoByIdAsync(int id);
-        Task<IEnumerable<TodoItem>> GetTodosByCategoryAsync(string category);
-        Task<IEnumerable<TodoItem>> GetCompletedTodosAsync();
-        Task<IEnumerable<TodoItem>> GetPendingTodosAsync();
-        Task<TodoItem> CreateTodoAsync(CreateTodoDto todoDto);
-        Task<TodoItem?> UpdateTodoAsync(int id, UpdateTodoDto todoDto);
-        Task<bool> DeleteTodoAsync(int id);
-        Task<TodoItem?> ToggleCompleteAsync(int id);
-        Task<Dictionary<string, object>> GetStatisticsAsync();
-    }
-
     public class TodoService : ITodoService
     {
         private readonly TodoContext _context;
@@ -91,8 +77,8 @@ namespace TodoApi.Services
             if (todoDto.Description != null)
                 todo.Description = todoDto.Description;
 
-            if (!string.IsNullOrEmpty(todoDto.Priority))
-                todo.Priority = todoDto.Priority;
+            if (todoDto.Priority.HasValue)
+                todo.Priority = todoDto.Priority.Value;
 
             if (todoDto.Category != null)
                 todo.Category = todoDto.Category;
@@ -148,7 +134,7 @@ namespace TodoApi.Services
 
             var prioritiesCount = await _context.TodoItems
                 .GroupBy(t => t.Priority)
-                .Select(g => new { Priority = g.Key, Count = g.Count() })
+                .Select(g => new { Priority = g.Key.ToString(), Count = g.Count() })
                 .ToDictionaryAsync(x => x.Priority, x => x.Count);
 
             return new Dictionary<string, object>
