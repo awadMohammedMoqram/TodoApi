@@ -1,7 +1,4 @@
-﻿using TodoApi.Models;
-using Microsoft.EntityFrameworkCore;
-
-namespace TodoApi.Data
+﻿namespace TodoApi.Infrastructure.Data
 {
     public class TodoContext : DbContext
     {
@@ -21,11 +18,11 @@ namespace TodoApi.Data
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Title).IsRequired().HasMaxLength(200);
                 entity.Property(e => e.Description).HasMaxLength(500);
-                
+
                 // Configure Priority as int (enum underlying type)
                 entity.Property(e => e.Priority)
                     .HasConversion<int>();
-                
+
                 entity.Property(e => e.Category).HasMaxLength(100);
                 entity.HasIndex(e => e.IsCompleted);
                 entity.HasIndex(e => e.CreatedAt);

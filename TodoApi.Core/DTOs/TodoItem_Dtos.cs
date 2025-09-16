@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using TodoApi.Models;
-
-namespace TodoApi.DTOs
+﻿namespace TodoApi.Core.DTOs
 {
     public class CreateTodoDto
     {
@@ -31,4 +28,5 @@ namespace TodoApi.DTOs
 
         public string? Category { get; set; }
     }
+
 }
